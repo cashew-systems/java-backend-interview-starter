@@ -14,6 +14,7 @@ class InterviewSolution {
    /**
     *  Challenge one: Implement cursor based pagination
     *
+    *  Path: GET /employees
     *
     *  Parameters:
     *    page_before
@@ -33,7 +34,7 @@ class InterviewSolution {
     */
     private static HashMap<String, Object> getEmployees(String path, HashMap<String, String> queryString, HashMap<String, String> headers, HashMap<String, String> body) throws SQLException {
         //TODO: Challenge, add cursor based pagination
-        ArrayList<HashMap<String, String>> employees = DatabaseUtil.queryDb("select * from employees");
+        ArrayList<HashMap<String, String>> employees = DatabaseUtil.readQuery("select * from employees");
         HashMap<String, Object> response = new HashMap<String, Object>();
         response.put("employees", employees);
 
@@ -60,7 +61,7 @@ class InterviewSolution {
     *  6. Return 200 to client
     *  7. Basic error cases and error handling
     */
-    private static HashMap<String, Object> postPayrollRun(String path, HashMap<String, String> queryString, HashMap<String, String> headers, HashMap<String, String> body) {
+    private static HashMap<String, Object> postPayrollRun(String path, HashMap<String, String> queryString, HashMap<String, String> headers, HashMap<String, String> body) throws SQLException {
         return null;
     }
 
@@ -92,7 +93,7 @@ class InterviewSolution {
      *      none
      *
      */
-    private static HashMap<String, Object> postPayrollRunEmployeePayment(String path, HashMap<String, String> queryString, HashMap<String, String> headers, HashMap<String, String> body) {
+    private static HashMap<String, Object> postPayrollRunEmployeePayment(String path, HashMap<String, String> queryString, HashMap<String, String> headers, HashMap<String, String> body) throws SQLException {
         return null;
     }
 
@@ -123,7 +124,7 @@ class InterviewSolution {
      *
      */
 
-    private static HashMap<String, Object> postPayrollRunFinalizeRun(String path, HashMap<String, String> queryString, HashMap<String, String> headers, HashMap<String, String> body) {
+    private static HashMap<String, Object> postPayrollRunFinalizeRun(String path, HashMap<String, String> queryString, HashMap<String, String> headers, HashMap<String, String> body) throws SQLException {
         return null;
     }
 
@@ -143,14 +144,29 @@ class InterviewSolution {
 
         } else if (verb.equals("POST") && path.matches("/payroll-run")) {
 
-            responseBody = postPayrollRun(path, queryString, headers, body);
+            try {
+                responseBody = postPayrollRun(path, queryString, headers, body);
+            } catch (SQLException e) {
+                //TODO: challenge, add better error handling
+                System.out.printf("There was a sql exception: %s\n", e);
+            }
             responseCode = 200;
 
         } else if (verb.equals("POST") && path.matches("/payroll-run/\\d/employee-payment/\\d")) {
-            responseBody = postPayrollRunEmployeePayment(path, queryString, headers, body);
+            try {
+                responseBody = postPayrollRunEmployeePayment(path, queryString, headers, body);
+            } catch (SQLException e) {
+                //TODO: challenge, add better error handling
+                System.out.printf("There was a sql exception: %s\n", e);
+            }
             responseCode = 200;
         } else if (verb.equals("POST") && path.matches("/payroll-run/\\d/finalize-run")) {
-            responseBody = postPayrollRunFinalizeRun(path, queryString, headers, body);
+            try {
+                responseBody = postPayrollRunFinalizeRun(path, queryString, headers, body);
+            } catch (SQLException e) {
+                //TODO: challenge, add better error handling
+                System.out.printf("There was a sql exception: %s\n", e);
+            }
             responseCode = 200;
         } else {
             responseBody = new HashMap<String, Object>();

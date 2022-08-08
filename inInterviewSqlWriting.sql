@@ -1,1 +1,1 @@
-select * from employees;
+-- Enter your SQL commands here

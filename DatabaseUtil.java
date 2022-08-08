@@ -10,11 +10,15 @@ import java.util.ArrayList;
 
 class DatabaseUtil {
 
-    public static ArrayList<HashMap<String, String>> queryDb(String dbQuery) throws SQLException{
+    public static ArrayList<HashMap<String, String>> readQuery(String dbQuery) throws SQLException{
         Connection connection = DriverManager.getConnection("jdbc:postgresql://payroll_database:5432/postgres","postgres","cashew");
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(dbQuery);
 
+        return getResultsFromResultSet(resultSet);
+    }
+
+    private static ArrayList<HashMap<String, String>> getResultsFromResultSet(ResultSet resultSet) throws SQLException {
         ResultSetMetaData metadata = resultSet.getMetaData();
         int numberOfCols = metadata.getColumnCount();
         ArrayList<HashMap<String, String>> resultValues = new ArrayList<HashMap<String, String>>();
@@ -32,6 +36,22 @@ class DatabaseUtil {
         }
 
         return resultValues;
+    }
+
+    public static boolean writeQuery(String dbQuery) throws SQLException{
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://payroll_database:5432/postgres","postgres","cashew");
+        Statement statement = connection.createStatement();
+        boolean rowInserted = statement.execute(dbQuery);
+        return rowInserted;
+    }
+
+
+    public static ArrayList<HashMap<String, String>> getMostRecentlyInsertedRecord(String table) throws SQLException{
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://payroll_database:5432/postgres","postgres","cashew");
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from " + table + " order by id desc limit 1;");
+        ArrayList<HashMap<String, String> > results = getResultsFromResultSet(resultSet);
+        return results;
     }
 
 }
