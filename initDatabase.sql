@@ -16,7 +16,7 @@ create table payroll_runs (
   status payroll_run_status
 );
 
-create table payroll_run_employee_payment_totals (
+create table payroll_run_employee_payments (
   id SERIAL primary key,
   employee_id INTEGER references employees(id),
   payroll_run_id INTEGER references payroll_runs(id),
@@ -30,6 +30,5 @@ insert into employees(name) values ('Aman');
 insert into employees(name) values ('Steve');
 
 insert into hourly_compensations(employee_id, amount) values (1, '10.01');
-insert into hourly_compensations(employee_id, amount) values (2, '9.01');
 insert into hourly_compensations(employee_id, amount) values (3, '30.01');
 insert into hourly_compensations(employee_id, amount) values (4, '40.01');
